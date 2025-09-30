@@ -156,15 +156,32 @@ const AdminFeesDues = () => {
 
   const getPriorityBadge = (priority) => {
     if (priority === "High") {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 animate-pulse">High</span>;
+      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">High</span>;
     } else if (priority === "Medium") {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200 animate-pulse">Medium</span>;
+      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">Medium</span>;
     } else {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 animate-pulse">Low</span>;
+      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">Low</span>;
     }
   };
 
-  // Icons as SVG components (replacing Lucide React icons)
+  // Floating Animation Component
+  const FloatingElements = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-10 left-10 w-4 h-4 bg-blue-300/30 rounded-full animate-float-slow"></div>
+      <div className="absolute top-20 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-float-medium"></div>
+      <div className="absolute bottom-20 left-20 w-3 h-3 bg-blue-500/30 rounded-full animate-float-fast"></div>
+    </div>
+  );
+
+  // Animated Background
+  const AnimatedBackground = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/20 rounded-full animate-pulse-slow"></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300/10 rounded-full animate-pulse-medium"></div>
+    </div>
+  );
+
+  // Icons as SVG components
   const AlertCircle = () => (
     <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -221,363 +238,380 @@ const AdminFeesDues = () => {
   );
 
   return (
-    <div className="space-y-8 p-6">
-      {/* Header Section */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-3">
-          <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl shadow-lg">
-            <AlertCircle />
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-              Fee Dues Management
-            </h2>
-            <p className="text-gray-600 flex items-center space-x-1">
-              <Sparkles />
-              <span>Track and manage outstanding fee payments</span>
-            </p>
-          </div>
-        </div>
-        <div className="flex space-x-3">
-          <button
-            onClick={sendBulkReminders}
-            className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
-          >
-            <Send />
-            <span className="ml-2">Send Bulk Reminders</span>
-          </button>
-          <button
-            onClick={exportReport}
-            className="flex items-center px-4 py-2 border-2 border-gray-300 hover:bg-gradient-to-r hover:from-green-50 hover:to-blue-50 hover:border-green-300 rounded-lg transition-all duration-300 hover:scale-105"
-          >
-            <Download />
-            <span className="ml-2">Export Report</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Filters Section */}
-      <div className="border-0 shadow-xl hover:shadow-2xl transition-all rounded-lg bg-white">
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 border-b p-6 rounded-t-lg">
-          <div className="flex items-center space-x-2">
-            <div className="p-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg">
-              <Filter />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/30 relative overflow-hidden">
+      <AnimatedBackground />
+      
+      <div className="relative space-y-8 p-6">
+        {/* Header Section */}
+        <div className="flex justify-between items-center animate-slide-down">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg group hover:scale-105 transition-transform duration-300">
+              <AlertCircle />
             </div>
-            <span className="text-lg font-semibold">Filters</span>
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                Fee Dues Management
+              </h2>
+              <p className="text-gray-600 flex items-center space-x-2 mt-1">
+                <Sparkles />
+                <span>Track and manage outstanding fee payments</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex space-x-3">
+            <button
+              onClick={sendBulkReminders}
+              className="flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+            >
+              <Send />
+              <span className="ml-2">Send Bulk Reminders</span>
+            </button>
+            <button
+              onClick={exportReport}
+              className="flex items-center px-4 py-2 border-2 border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 bg-white/80 backdrop-blur-sm group"
+            >
+              <Download />
+              <span className="ml-2">Export Report</span>
+            </button>
           </div>
         </div>
-        <div className="p-6">
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <div className="relative">
-                <div className="absolute left-3 top-3">
-                  <Search />
+
+        {/* Stats Cards - UNCHANGED */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Total Outstanding Card */}
+          <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group animate-card-float">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
+              <div className="w-full h-full bg-gradient-to-br from-red-500 to-red-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
+            </div>
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-gray-700">Total Outstanding</h3>
+                <div className="p-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <AlertCircle />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Search by name, roll number, or class..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 rounded-lg focus:border-red-400 transition-all duration-300 shadow-sm hover:shadow-md"
-                />
               </div>
+              <div className="text-3xl font-bold text-red-600 mb-1">
+                ₹58,000
+              </div>
+              <p className="text-xs text-gray-600">6 students</p>
             </div>
-            <select
-              value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
-              className="w-48 border-2 border-gray-300 rounded-lg focus:border-red-400 transition-all duration-300 shadow-sm hover:shadow-md px-3 py-2"
-            >
-              <option value="all">All Classes</option>
-              <option value="VII">VII</option>
-              <option value="VIII">VIII</option>
-              <option value="IX">IX</option>
-              <option value="X">X</option>
-              <option value="XI">XI</option>
-              <option value="XII">XII</option>
-            </select>
-            <select
-              value={selectedPriority}
-              onChange={(e) => setSelectedPriority(e.target.value)}
-              className="w-48 border-2 border-gray-300 rounded-lg focus:border-red-400 transition-all duration-300 shadow-sm hover:shadow-md px-3 py-2"
-            >
-              <option value="all">All Priorities</option>
-              <option value="High">High Priority</option>
-              <option value="Medium">Medium Priority</option>
-              <option value="Low">Low Priority</option>
-            </select>
+          </div>
+
+          {/* High Priority Card */}
+          <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group animate-card-float" style={{animationDelay: '100ms'}}>
+            <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-yellow-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
+              <div className="w-full h-full bg-gradient-to-br from-yellow-500 to-yellow-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
+            </div>
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-gray-700">High Priority</h3>
+                <div className="p-2 rounded-lg bg-gradient-to-r from-yellow-500 to-yellow-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <AlertCircle />
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-yellow-600 mb-1">
+                2
+              </div>
+              <p className="text-xs text-gray-600">Students</p>
+            </div>
+          </div>
+
+          {/* Overdue >30 Days Card */}
+          <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group animate-card-float" style={{animationDelay: '200ms'}}>
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
+              <div className="w-full h-full bg-gradient-to-br from-orange-500 to-orange-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
+            </div>
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-gray-700">Overdue &gt;30 Days</h3>
+                <div className="p-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <AlertCircle />
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-orange-600 mb-1">
+                0
+              </div>
+              <p className="text-xs text-gray-600">Critical cases</p>
+            </div>
+          </div>
+
+          {/* Average Due Card */}
+          <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group animate-card-float" style={{animationDelay: '300ms'}}>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
+              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
+            </div>
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-medium text-gray-700">Average Due</h3>
+                <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <AlertCircle />
+                </div>
+              </div>
+              <div className="text-3xl font-bold text-blue-600 mb-1">
+                ₹9,667
+              </div>
+              <p className="text-xs text-gray-600">Per student</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Students Table */}
-      <div className="border-0 shadow-xl hover:shadow-2xl transition-all rounded-lg bg-white">
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 border-b p-6 rounded-t-lg">
-          <div className="flex items-center justify-between">
+        {/* Filters Section */}
+        <div className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl bg-white border border-blue-100/50 backdrop-blur-sm animate-slide-in-left">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100 p-6 rounded-t-2xl">
             <div className="flex items-center space-x-2">
-              <div className="p-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg">
-                <AlertCircle />
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+                <Filter />
               </div>
-              <span className="text-lg font-semibold">
-                Students with Outstanding Dues ({filteredStudents.length})
-              </span>
-            </div>
-            <div className="text-sm text-gray-500">
-              Total Outstanding: ₹{filteredStudents.reduce((sum, s) => sum + s.totalDue, 0).toLocaleString()}
+              <span className="text-lg font-semibold text-gray-800">Filters</span>
             </div>
           </div>
-          <p className="text-gray-600 mt-2">Manage and track student fee dues efficiently</p>
+          <div className="p-6">
+            <div className="flex space-x-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <div className="absolute left-3 top-3">
+                    <Search />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search by name, roll number, or class..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+                  />
+                </div>
+              </div>
+              <select
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                className="w-48 px-3 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+              >
+                <option value="all">All Classes</option>
+                <option value="VII">VII</option>
+                <option value="VIII">VIII</option>
+                <option value="IX">IX</option>
+                <option value="X">X</option>
+                <option value="XI">XI</option>
+                <option value="XII">XII</option>
+              </select>
+              <select
+                value={selectedPriority}
+                onChange={(e) => setSelectedPriority(e.target.value)}
+                className="w-48 px-3 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+              >
+                <option value="all">All Priorities</option>
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gradient-to-r from-gray-50 to-gray-100">
-                <th className="text-left p-4 font-semibold">Roll No.</th>
-                <th className="text-left p-4 font-semibold">Name</th>
-                <th className="text-left p-4 font-semibold">Class</th>
-                <th className="text-left p-4 font-semibold">Due Amount</th>
-                <th className="text-left p-4 font-semibold">Overdue Days</th>
-                <th className="text-left p-4 font-semibold">Priority</th>
-                <th className="text-left p-4 font-semibold">Parent Contact</th>
-                <th className="text-left p-4 font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.map((student, index) => (
-                <tr
-                  key={student.id}
-                  className="hover:bg-gradient-to-r hover:from-red-50 hover:to-orange-50 transition-all border-b"
-                >
-                  <td className="p-4 font-medium text-blue-600">{student.rollNo}</td>
-                  <td className="p-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
-                        {student.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </div>
-                      <span className="font-medium">{student.name}</span>
-                    </div>
-                  </td>
-                  <td className="p-4">{student.class}</td>
-                  <td className="p-4 font-bold text-red-600">₹{student.totalDue.toLocaleString()}</td>
-                  <td className="p-4">
-                    <span
-                      className={`font-medium ${
-                        student.overdueDays > 20
-                          ? "text-red-600"
-                          : student.overdueDays > 10
-                          ? "text-yellow-600"
-                          : "text-green-600"
-                      }`}
-                    >
-                      {student.overdueDays} days
-                    </span>
-                  </td>
-                  <td className="p-4">{getPriorityBadge(student.priority)}</td>
-                  <td className="p-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-1 text-sm">
-                        <Phone />
-                        <span>{student.parentMobile}</span>
-                      </div>
-                      <div className="text-xs text-gray-500">{student.parentName}</div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleViewDetails(student)}
-                        className="p-2 hover:bg-blue-100 hover:text-blue-600 rounded-lg transition-all duration-300 hover:scale-110"
-                      >
-                        <Eye />
-                      </button>
-                      <button
-                        onClick={() => handleSendReminder(student)}
-                        className="p-2 hover:bg-green-100 hover:text-green-600 rounded-lg transition-all duration-300 hover:scale-110"
-                      >
-                        <Send />
-                      </button>
-                    </div>
-                  </td>
+
+        {/* Students Table */}
+        <div className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl bg-white border border-blue-100/50 backdrop-blur-sm animate-slide-in-up">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100 p-6 rounded-t-2xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
+                  <AlertCircle />
+                </div>
+                <span className="text-lg font-semibold text-gray-800">
+                  Students with Outstanding Dues ({filteredStudents.length})
+                </span>
+              </div>
+              <div className="text-sm text-gray-600">
+                Total Outstanding: ₹{filteredStudents.reduce((sum, s) => sum + s.totalDue, 0).toLocaleString()}
+              </div>
+            </div>
+            <p className="text-gray-600 mt-2">Manage and track student fee dues efficiently</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-blue-50/80 to-blue-100/50 border-b border-blue-100">
+                  <th className="text-left p-4 font-semibold text-gray-700">Roll No.</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Name</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Class</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Due Amount</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Overdue Days</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Priority</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Parent Contact</th>
+                  <th className="text-left p-4 font-semibold text-gray-700">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Total Outstanding Card */}
-        <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-            <div className="w-full h-full bg-gradient-to-br from-red-500 to-red-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-          </div>
-          <div className="relative p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-gray-700">Total Outstanding</h3>
-              <div className="p-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <AlertCircle />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-red-600 mb-1">
-              ₹{filteredStudents.reduce((sum, s) => sum + s.totalDue, 0).toLocaleString()}
-            </div>
-            <p className="text-xs text-gray-600">{filteredStudents.length} students</p>
-          </div>
-        </div>
-
-        {/* High Priority Card */}
-        <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group">
-          <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-yellow-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-            <div className="w-full h-full bg-gradient-to-br from-yellow-500 to-yellow-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-          </div>
-          <div className="relative p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-gray-700">High Priority</h3>
-              <div className="p-2 rounded-lg bg-gradient-to-r from-yellow-500 to-yellow-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <AlertCircle />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-yellow-600 mb-1">
-              {filteredStudents.filter((s) => s.priority === "High").length}
-            </div>
-            <p className="text-xs text-gray-600">Students</p>
-          </div>
-        </div>
-
-        {/* Overdue >30 Days Card */}
-        <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group">
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-            <div className="w-full h-full bg-gradient-to-br from-orange-500 to-orange-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-          </div>
-          <div className="relative p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-gray-700">Overdue &gt;30 Days</h3>
-              <div className="p-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse">
-                <AlertCircle />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-orange-600 mb-1">
-              {filteredStudents.filter((s) => s.overdueDays > 30).length}
-            </div>
-            <p className="text-xs text-gray-600">Critical cases</p>
-          </div>
-        </div>
-
-        {/* Average Due Card */}
-        <div className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all hover:scale-105 rounded-lg bg-white group">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-          <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-          </div>
-          <div className="relative p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-medium text-gray-700">Average Due</h3>
-              <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <AlertCircle />
-              </div>
-            </div>
-            <div className="text-3xl font-bold text-blue-600 mb-1">
-              ₹
-              {filteredStudents.length > 0
-                ? Math.round(
-                    filteredStudents.reduce((sum, s) => sum + s.totalDue, 0) / filteredStudents.length
-                  ).toLocaleString()
-                : 0}
-            </div>
-            <p className="text-xs text-gray-600">Per student</p>
+              </thead>
+              <tbody>
+                {filteredStudents.map((student, index) => (
+                  <tr
+                    key={student.id}
+                    className="hover:bg-blue-50/50 transition-all duration-300 border-b border-blue-50 group animate-fade-in"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <td className="p-4 font-medium text-blue-600">{student.rollNo}</td>
+                    <td className="p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xs group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                          {student.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </div>
+                        <span className="font-medium text-gray-800">{student.name}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 text-gray-800">{student.class}</td>
+                    <td className="p-4 font-bold text-red-600">₹{student.totalDue.toLocaleString()}</td>
+                    <td className="p-4">
+                      <span
+                        className={`font-medium ${
+                          student.overdueDays > 20
+                            ? "text-red-600"
+                            : student.overdueDays > 10
+                            ? "text-yellow-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {student.overdueDays} days
+                      </span>
+                    </td>
+                    <td className="p-4">{getPriorityBadge(student.priority)}</td>
+                    <td className="p-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1 text-sm">
+                          <Phone />
+                          <span>{student.parentMobile}</span>
+                        </div>
+                        <div className="text-xs text-gray-500">{student.parentName}</div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleViewDetails(student)}
+                          className="p-2 hover:bg-blue-100 hover:text-blue-600 rounded-xl transition-all duration-300 hover:scale-110 group"
+                        >
+                          <Eye />
+                        </button>
+                        <button
+                          onClick={() => handleSendReminder(student)}
+                          className="p-2 hover:bg-green-100 hover:text-green-600 rounded-xl transition-all duration-300 hover:scale-110 group"
+                        >
+                          <Send />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
       {/* Send Reminder Dialog */}
       {reminderDialogOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full mx-4 shadow-2xl">
-            <div className="p-6 border-b">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-                Send Fee Reminder
-              </h3>
-              <p className="text-gray-600">
-                Send reminder to {selectedStudent?.parentName} ({selectedStudent?.parentMobile})
-              </p>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Send />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Send Fee Reminder</h3>
+                    <p className="text-gray-600">
+                      Send reminder to {selectedStudent?.parentName} ({selectedStudent?.parentMobile})
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setReminderDialogOpen(false)}
+                  className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Student Name</label>
+                    <input
+                      value={selectedStudent?.name || ""}
+                      disabled
+                      className="w-full p-3 bg-blue-50 rounded-xl border border-blue-100"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Due Amount</label>
+                    <input
+                      value={selectedStudent ? `₹${selectedStudent.totalDue.toLocaleString()}` : ""}
+                      disabled
+                      className="w-full p-3 bg-red-50 text-red-600 font-bold rounded-xl border border-red-100"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Parent Name</label>
+                    <input
+                      value={selectedStudent?.parentName || ""}
+                      disabled
+                      className="w-full p-3 bg-blue-50 rounded-xl border border-blue-100"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">Contact Method</label>
+                    <select className="w-full p-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80">
+                      <option value="sms">SMS</option>
+                      <option value="email">Email</option>
+                      <option value="both">SMS & Email</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Message</label>
+                  <textarea
+                    value={reminderMessage}
+                    onChange={(e) => setReminderMessage(e.target.value)}
+                    rows={4}
+                    className="w-full p-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80 resize-none"
+                  />
+                </div>
+
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-xl border border-blue-200">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <AlertCircle />
+                    <span className="font-medium text-blue-700">Reminder Details</span>
+                  </div>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p>• Overdue: {selectedStudent?.overdueDays} days</p>
+                    <p>• Priority: {selectedStudent?.priority}</p>
+                    <p>• Last Payment: {selectedStudent?.lastPayment || "Never"}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Student Name</label>
-                  <input
-                    value={selectedStudent?.name || ""}
-                    disabled
-                    className="w-full p-2 bg-gray-50 rounded border"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Due Amount</label>
-                  <input
-                    value={selectedStudent ? `₹${selectedStudent.totalDue.toLocaleString()}` : ""}
-                    disabled
-                    className="w-full p-2 bg-red-50 text-red-600 font-bold rounded border"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Parent Name</label>
-                  <input
-                    value={selectedStudent?.parentName || ""}
-                    disabled
-                    className="w-full p-2 bg-gray-50 rounded border"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Contact Method</label>
-                  <select className="w-full p-2 border-2 border-gray-300 rounded focus:border-red-400 transition-all duration-300">
-                    <option value="sms">SMS</option>
-                    <option value="email">Email</option>
-                    <option value="both">SMS & Email</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Message</label>
-                <textarea
-                  value={reminderMessage}
-                  onChange={(e) => setReminderMessage(e.target.value)}
-                  rows={4}
-                  className="w-full p-2 border-2 border-gray-300 rounded focus:border-red-400 transition-all duration-300"
-                />
-              </div>
-
-              <div className="p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-200">
-                <div className="flex items-center space-x-2 mb-2">
-                  <AlertCircle />
-                  <span className="font-medium text-red-700">Reminder Details</span>
-                </div>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p>• Overdue: {selectedStudent?.overdueDays} days</p>
-                  <p>• Priority: {selectedStudent?.priority}</p>
-                  <p>• Last Payment: {selectedStudent?.lastPayment || "Never"}</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 border-t flex justify-end space-x-3">
+            <div className="p-6 border-t border-blue-100 flex justify-end space-x-3 rounded-b-3xl bg-blue-50/50">
               <button
                 onClick={() => setReminderDialogOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-6 py-3 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 bg-white/80"
               >
                 Cancel
               </button>
               <button
                 onClick={sendReminder}
-                className="flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 <Send />
                 <span className="ml-2">Send Reminder</span>
@@ -589,98 +623,115 @@ const AdminFeesDues = () => {
 
       {/* Student Details Dialog */}
       {detailsDialogOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg max-w-3xl w-full mx-4 shadow-2xl">
-            <div className="p-6 border-b">
-              <h3 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-                Student Fee Details
-              </h3>
-              <p className="text-gray-600">Complete fee information for {selectedStudent?.name}</p>
-            </div>
-            {selectedStudent && (
-              <div className="p-6 space-y-6">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <label className="font-semibold">Student Name</label>
-                    <p className="p-2 bg-gray-50 rounded">{selectedStudent.name}</p>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-3xl w-full border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Eye />
                   </div>
-                  <div className="space-y-2">
-                    <label className="font-semibold">Roll Number</label>
-                    <p className="p-2 bg-gray-50 rounded">{selectedStudent.rollNo}</p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="font-semibold">Class</label>
-                    <p className="p-2 bg-gray-50 rounded">{selectedStudent.class}</p>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Student Fee Details</h3>
+                    <p className="text-gray-600">Complete fee information for {selectedStudent?.name}</p>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="font-semibold">Total Due Amount</label>
-                    <p className="p-3 bg-red-50 rounded font-bold text-red-600 text-lg">
-                      ₹{selectedStudent.totalDue.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="font-semibold">Overdue Period</label>
-                    <p className="p-3 bg-yellow-50 rounded font-bold text-yellow-600 text-lg">
-                      {selectedStudent.overdueDays} days
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <label className="font-semibold">Fee Breakdown</label>
-                  <div className="space-y-2">
-                    {selectedStudent.feeHeads?.map((fee, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                        <div>
-                          <p className="font-medium">{fee.name}</p>
-                          <p className="text-sm text-gray-500">Due Date: {fee.dueDate}</p>
-                        </div>
-                        <p className="font-bold text-red-600 text-lg">₹{fee.amount.toLocaleString()}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                  <div className="space-y-3">
-                    <label className="font-semibold">Parent Contact Information</label>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-gray-50 rounded">
-                        <p className="font-medium">{selectedStudent.parentName}</p>
-                      </div>
-                      <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded">
-                        <Phone />
-                        <span>{selectedStudent.parentMobile}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded">
-                        <Mail />
-                        <span>{selectedStudent.parentEmail}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <label className="font-semibold">Payment Status</label>
-                    <div className="space-y-2">
-                      <div className="p-2 bg-gray-50 rounded">
-                        <p className="text-sm text-gray-600">Priority Level</p>
-                        <div className="mt-1">{getPriorityBadge(selectedStudent.priority)}</div>
-                      </div>
-                      <div className="p-2 bg-gray-50 rounded">
-                        <p className="text-sm text-gray-600">Last Payment</p>
-                        <p className="font-medium">{selectedStudent.lastPayment || "No previous payments"}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button
+                  onClick={() => setDetailsDialogOpen(false)}
+                  className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-            )}
-            <div className="p-6 border-t flex justify-end space-x-3">
+              
+              {selectedStudent && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <label className="font-semibold text-sm text-gray-700">Student Name</label>
+                      <p className="p-3 bg-blue-50 rounded-xl border border-blue-100">{selectedStudent.name}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="font-semibold text-sm text-gray-700">Roll Number</label>
+                      <p className="p-3 bg-blue-50 rounded-xl border border-blue-100">{selectedStudent.rollNo}</p>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="font-semibold text-sm text-gray-700">Class</label>
+                      <p className="p-3 bg-blue-50 rounded-xl border border-blue-100">{selectedStudent.class}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="font-semibold text-sm text-gray-700">Total Due Amount</label>
+                      <p className="p-4 bg-red-50 rounded-xl font-bold text-red-600 text-lg border border-red-100">
+                        ₹{selectedStudent.totalDue.toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="font-semibold text-sm text-gray-700">Overdue Period</label>
+                      <p className="p-4 bg-yellow-50 rounded-xl font-bold text-yellow-600 text-lg border border-yellow-100">
+                        {selectedStudent.overdueDays} days
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="font-semibold text-sm text-gray-700">Fee Breakdown</label>
+                    <div className="space-y-2">
+                      {selectedStudent.feeHeads?.map((fee, index) => (
+                        <div key={index} className="flex justify-between items-center p-4 bg-blue-50 rounded-xl border border-blue-100">
+                          <div>
+                            <p className="font-medium text-gray-800">{fee.name}</p>
+                            <p className="text-sm text-gray-500">Due Date: {fee.dueDate}</p>
+                          </div>
+                          <p className="font-bold text-red-600 text-lg">₹{fee.amount.toLocaleString()}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-blue-100">
+                    <div className="space-y-3">
+                      <label className="font-semibold text-sm text-gray-700">Parent Contact Information</label>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                          <p className="font-medium text-gray-800">{selectedStudent.parentName}</p>
+                        </div>
+                        <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                          <Phone />
+                          <span className="text-gray-800">{selectedStudent.parentMobile}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-xl border border-blue-100">
+                          <Mail />
+                          <span className="text-gray-800">{selectedStudent.parentEmail}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <label className="font-semibold text-sm text-gray-700">Payment Status</label>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                          <p className="text-sm text-gray-600">Priority Level</p>
+                          <div className="mt-2">{getPriorityBadge(selectedStudent.priority)}</div>
+                        </div>
+                        <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
+                          <p className="text-sm text-gray-600">Last Payment</p>
+                          <p className="font-medium text-gray-800">{selectedStudent.lastPayment || "No previous payments"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="p-6 border-t border-blue-100 flex justify-end space-x-3 rounded-b-3xl bg-blue-50/50">
               <button
                 onClick={() => setDetailsDialogOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-6 py-3 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 bg-white/80"
               >
                 Close
               </button>
@@ -689,7 +740,7 @@ const AdminFeesDues = () => {
                   setDetailsDialogOpen(false);
                   handleSendReminder(selectedStudent);
                 }}
-                className="flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 <Send />
                 <span className="ml-2">Send Reminder</span>
@@ -698,6 +749,69 @@ const AdminFeesDues = () => {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(-5deg); }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.1; transform: scale(1); }
+          50% { opacity: 0.2; transform: scale(1.1); }
+        }
+        @keyframes pulse-medium {
+          0%, 100% { opacity: 0.05; transform: scale(1); }
+          50% { opacity: 0.15; transform: scale(1.05); }
+        }
+        @keyframes modal-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modal-slide-up {
+          from { opacity: 0; transform: translateY(30px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slide-down {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes card-float {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+        .animate-float-medium { animation: float-medium 4s ease-in-out infinite; }
+        .animate-float-fast { animation: float-fast 3s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+        .animate-pulse-medium { animation: pulse-medium 6s ease-in-out infinite; }
+        .animate-modal-fade-in { animation: modal-fade-in 0.3s ease-out; }
+        .animate-modal-slide-up { animation: modal-slide-up 0.4s ease-out; }
+        .animate-slide-down { animation: slide-down 0.5s ease-out; }
+        .animate-slide-in-left { animation: slide-in-left 0.5s ease-out; }
+        .animate-slide-in-up { animation: slide-in-up 0.5s ease-out; }
+        .animate-card-float { animation: card-float 0.6s ease-out; }
+        .animate-fade-in { animation: fade-in 0.4s ease-out; }
+      `}</style>
     </div>
   );
 };

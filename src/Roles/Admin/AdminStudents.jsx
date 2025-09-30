@@ -66,13 +66,13 @@ const AdminStudents = () => {
 
   const getStatusBadge = (status) => {
     const statusStyles = {
-      Paid: 'bg-green-100 text-green-800 border-green-200 animate-pulse',
-      Partial: 'bg-yellow-100 text-yellow-800 border-yellow-200 animate-pulse',
-      Due: 'bg-red-100 text-red-800 border-red-200 animate-pulse',
+      Paid: 'bg-green-100 text-green-700 border border-green-200',
+      Partial: 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+      Due: 'bg-red-100 text-red-700 border border-red-200',
     };
     
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusStyles[status]}`}>
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyles[status]} transition-all duration-300`}>
         {status}
       </span>
     );
@@ -144,6 +144,23 @@ const AdminStudents = () => {
     setIsAddModalOpen(false);
   };
 
+  // Floating Animation Component
+  const FloatingElements = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-10 left-10 w-4 h-4 bg-blue-300/30 rounded-full animate-float-slow"></div>
+      <div className="absolute top-20 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-float-medium"></div>
+      <div className="absolute bottom-20 left-20 w-3 h-3 bg-blue-500/30 rounded-full animate-float-fast"></div>
+    </div>
+  );
+
+  // Animated Background
+  const AnimatedBackground = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/20 rounded-full animate-pulse-slow"></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300/10 rounded-full animate-pulse-medium"></div>
+    </div>
+  );
+
   // Icons as SVG components
   const SearchIcon = () => (
     <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +206,7 @@ const AdminStudents = () => {
   );
 
   const SparklesIcon = () => (
-    <svg className="w-4 h-4 text-blue-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
     </svg>
   );
@@ -201,19 +218,21 @@ const AdminStudents = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 space-y-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/30 relative overflow-hidden">
+      <AnimatedBackground />
+      
+      <div className="relative max-w-7xl mx-auto space-y-6 p-6">
         {/* Header */}
-        <div className="flex justify-between items-center animate-in slide-in-from-top duration-500">
+        <div className="flex justify-between items-center animate-slide-down">
           <div className="flex items-center space-x-3">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg group hover:scale-105 transition-transform duration-300">
               <UsersIcon />
             </div>
             <div>
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 Student Management
               </h2>
-              <p className="text-gray-600 flex items-center space-x-1">
+              <p className="text-gray-600 flex items-center space-x-2 mt-1">
                 <SparklesIcon />
                 <span>Manage student information and records</span>
               </p>
@@ -221,7 +240,7 @@ const AdminStudents = () => {
           </div>
           <button
             onClick={handleAddStudent}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105 animate-in slide-in-from-right duration-500 flex items-center"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 animate-slide-in-right flex items-center group"
           >
             <PlusIcon />
             <span className="ml-2">Add Student</span>
@@ -229,13 +248,13 @@ const AdminStudents = () => {
         </div>
 
         {/* Filters Card */}
-        <div className="bg-white rounded-lg border-0 shadow-xl hover:shadow-2xl transition-all duration-500 animate-in slide-in-from-left mt-8">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-b px-6 py-4 rounded-t-lg">
+        <div className="bg-white rounded-2xl border border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 animate-slide-in-left backdrop-blur-sm">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100 px-6 py-4 rounded-t-2xl">
             <div className="flex items-center space-x-2">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
+              <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
                 <FilterIcon />
               </div>
-              <h3 className="text-lg font-semibold">Filters</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Filters</h3>
             </div>
           </div>
           <div className="p-6">
@@ -250,14 +269,14 @@ const AdminStudents = () => {
                     placeholder="Search by name or roll number..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300 shadow-sm hover:shadow-md"
+                    className="w-full pl-10 pr-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
                   />
                 </div>
               </div>
               <select
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
-                className="w-48 px-3 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300 shadow-sm hover:shadow-md"
+                className="w-48 px-3 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
               >
                 <option value="all">All Classes</option>
                 <option value="8-A">8-A</option>
@@ -271,16 +290,16 @@ const AdminStudents = () => {
         </div>
 
         {/* Students Table Card */}
-        <div className="bg-white rounded-lg border-0 shadow-xl hover:shadow-2xl transition-all animate-in slide-in-from-bottom duration-700 mt-8">
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border-b px-6 py-4 rounded-t-lg">
+        <div className="bg-white rounded-2xl border border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 animate-slide-in-up backdrop-blur-sm">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100 px-6 py-4 rounded-t-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg">
                   <UsersIcon />
                 </div>
-                <h3 className="text-lg font-semibold">Students ({filteredStudents.length})</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Students ({filteredStudents.length})</h3>
               </div>
-              <div className="text-sm text-gray-500">Total: {students.length} students</div>
+              <div className="text-sm text-gray-600">Total: {students.length} students</div>
             </div>
             <p className="text-sm text-gray-600 mt-1">Manage student information and fee assignments</p>
           </div>
@@ -288,59 +307,46 @@ const AdminStudents = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Roll No.
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Class
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Section
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Parent
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Fee Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Due Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Actions
-                  </th>
+                <tr className="bg-gradient-to-r from-blue-50/80 to-blue-100/50 border-b border-blue-100">
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Roll No.</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Student</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Class</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Section</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Parent</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Fee Status</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Due Amount</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-blue-100">
                 {filteredStudents.map((student, index) => (
                   <tr
                     key={student.id}
-                    className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all animate-in slide-in-from-left duration-500"
+                    className="hover:bg-blue-50/50 transition-all duration-300 group animate-fade-in"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="font-medium text-blue-600">{student.rollNo}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300 shadow-lg">
                           {student.initials}
                         </div>
-                        <span className="font-medium">{student.name}</span>
+                        <div>
+                          <span className="font-medium text-gray-800 block">{student.name}</span>
+                          <span className="text-sm text-gray-500">{student.email}</span>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-gray-900">{student.class}</span>
+                      <span className="text-gray-800 font-medium">{student.class}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-gray-900">{student.section}</span>
+                      <span className="text-gray-800">{student.section}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-gray-900">{student.parentName}</span>
+                      <span className="text-gray-800">{student.parentName}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(student.feeStatus)}
@@ -356,21 +362,21 @@ const AdminStudents = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleViewStudent(student)}
-                          className="p-2 hover:bg-blue-100 hover:text-blue-600 rounded transition-all duration-300 hover:scale-110"
+                          className="p-2 hover:bg-blue-100 hover:text-blue-600 rounded-xl transition-all duration-300 hover:scale-110 group"
                           title="View Student"
                         >
                           <EyeIcon />
                         </button>
                         <button
                           onClick={() => handleEditStudent(student)}
-                          className="p-2 hover:bg-green-100 hover:text-green-600 rounded transition-all duration-300 hover:scale-110"
+                          className="p-2 hover:bg-green-100 hover:text-green-600 rounded-xl transition-all duration-300 hover:scale-110 group"
                           title="Edit Student"
                         >
                           <EditIcon />
                         </button>
                         <button
                           onClick={() => handleDeleteStudent(student)}
-                          className="p-2 hover:bg-red-100 hover:text-red-600 rounded transition-all duration-300 hover:scale-110"
+                          className="p-2 hover:bg-red-100 hover:text-red-600 rounded-xl transition-all duration-300 hover:scale-110 group"
                           title="Delete Student"
                         >
                           <TrashIcon />
@@ -387,65 +393,50 @@ const AdminStudents = () => {
 
       {/* View Student Modal */}
       {isViewModalOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto backdrop-blur-xl border border-white/20">
-            <div className="px-6 py-4 border-b">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Student Details
-                </h3>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <UsersIcon />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Student Details</h3>
+                    <p className="text-gray-600">Complete student information</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setIsViewModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors duration-150"
+                  className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110"
                 >
                   <CloseIcon />
                 </button>
               </div>
-            </div>
-            <div className="p-6">
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Full Name</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.name}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Roll Number</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.rollNo}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Class</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.class}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Section</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.section}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Email</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.email}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Mobile</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.mobile}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Parent Name</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.parentName}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="font-semibold text-sm">Fee Status</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.feeStatus}</p>
-                </div>
-                <div className="col-span-2 space-y-2">
-                  <label className="font-semibold text-sm">Address</label>
-                  <p className="p-2 bg-gray-50 rounded text-gray-900">{selectedStudent.address}</p>
-                </div>
+                {Object.entries({
+                  'Full Name': selectedStudent.name,
+                  'Roll Number': selectedStudent.rollNo,
+                  'Class': selectedStudent.class,
+                  'Section': selectedStudent.section,
+                  'Email': selectedStudent.email,
+                  'Mobile': selectedStudent.mobile,
+                  'Parent Name': selectedStudent.parentName,
+                  'Fee Status': selectedStudent.feeStatus,
+                  'Address': selectedStudent.address
+                }).map(([key, value]) => (
+                  <div key={key} className="space-y-2">
+                    <label className="font-semibold text-sm text-gray-700">{key}</label>
+                    <p className="p-3 bg-blue-50 rounded-xl text-gray-800 border border-blue-100">{value}</p>
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="px-6 py-4 border-t bg-gray-50 flex justify-end rounded-b-lg">
+            <div className="px-6 py-4 border-t border-blue-100 bg-blue-50/50 flex justify-end rounded-b-3xl">
               <button
                 onClick={() => setIsViewModalOpen(false)}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-150"
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 Close
               </button>
@@ -456,255 +447,244 @@ const AdminStudents = () => {
 
       {/* Edit Student Modal */}
       {isEditModalOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto backdrop-blur-xl border border-white/20">
-            <div className="px-6 py-4 border-b">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Edit Student
-                </h3>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <EditIcon />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Edit Student</h3>
+                    <p className="text-gray-600">Update student information</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setIsEditModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors duration-150"
+                  className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110"
                 >
                   <CloseIcon />
                 </button>
               </div>
-            </div>
-            <form onSubmit={handleUpdateStudent}>
-              <div className="p-6">
+              <form onSubmit={handleUpdateStudent}>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="edit-name" className="font-semibold text-sm">Full Name</label>
-                    <input
-                      id="edit-name"
-                      name="name"
-                      defaultValue={selectedStudent.name}
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="edit-rollNo" className="font-semibold text-sm">Roll Number</label>
-                    <input
-                      id="edit-rollNo"
-                      defaultValue={selectedStudent.rollNo}
-                      disabled
-                      className="w-full p-2 bg-gray-100 rounded-lg text-gray-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="edit-email" className="font-semibold text-sm">Email</label>
-                    <input
-                      id="edit-email"
-                      name="email"
-                      type="email"
-                      defaultValue={selectedStudent.email}
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="edit-mobile" className="font-semibold text-sm">Mobile</label>
-                    <input
-                      id="edit-mobile"
-                      name="mobile"
-                      defaultValue={selectedStudent.mobile}
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="edit-parentName" className="font-semibold text-sm">Parent Name</label>
-                    <input
-                      id="edit-parentName"
-                      name="parentName"
-                      defaultValue={selectedStudent.parentName}
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="edit-address" className="font-semibold text-sm">Address</label>
-                    <input
-                      id="edit-address"
-                      name="address"
-                      defaultValue={selectedStudent.address}
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                    />
-                  </div>
+                  {[
+                    { id: 'edit-name', name: 'name', label: 'Full Name', value: selectedStudent.name, type: 'text' },
+                    { id: 'edit-rollNo', name: 'rollNo', label: 'Roll Number', value: selectedStudent.rollNo, type: 'text', disabled: true },
+                    { id: 'edit-email', name: 'email', label: 'Email', value: selectedStudent.email, type: 'email' },
+                    { id: 'edit-mobile', name: 'mobile', label: 'Mobile', value: selectedStudent.mobile, type: 'text' },
+                    { id: 'edit-parentName', name: 'parentName', label: 'Parent Name', value: selectedStudent.parentName, type: 'text' },
+                    { id: 'edit-address', name: 'address', label: 'Address', value: selectedStudent.address, type: 'text' },
+                  ].map((field) => (
+                    <div key={field.id} className="space-y-2">
+                      <label htmlFor={field.id} className="font-semibold text-sm text-gray-700">{field.label}</label>
+                      <input
+                        id={field.id}
+                        name={field.name}
+                        type={field.type}
+                        defaultValue={field.value}
+                        disabled={field.disabled}
+                        className="w-full p-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+                      />
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="px-6 py-4 border-t bg-gray-50 flex justify-end space-x-2 rounded-b-lg">
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-150"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  Update Student
-                </button>
-              </div>
-            </form>
+                <div className="flex justify-end space-x-3 pt-6 mt-6 border-t border-blue-100">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-6 py-3 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 bg-white/80"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    Update Student
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
 
       {/* Add Student Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto backdrop-blur-xl border border-white/20">
-            <div className="px-6 py-4 border-b">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Add New Student
-                </h3>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <PlusIcon />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800">Add New Student</h3>
+                    <p className="text-gray-600">Enter student details to add them to the system</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setIsAddModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors duration-150"
+                  className="p-2 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110"
                 >
                   <CloseIcon />
                 </button>
               </div>
-              <p className="text-sm text-gray-600 mt-1">Enter student details to add them to the system.</p>
-            </div>
-            <form onSubmit={handleAddNewStudent}>
-              <div className="p-6">
+              <form onSubmit={handleAddNewStudent}>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="add-name" className="font-semibold text-sm">Full Name</label>
-                    <input
-                      id="add-name"
-                      name="name"
-                      placeholder="Enter full name"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-rollNo" className="font-semibold text-sm">Roll Number</label>
-                    <input
-                      id="add-rollNo"
-                      name="rollNo"
-                      placeholder="Enter roll number"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-class" className="font-semibold text-sm">Class</label>
-                    <select
-                      id="add-class"
-                      name="class"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    >
-                      <option value="">Select class</option>
-                      <option value="8-A">8-A</option>
-                      <option value="9-A">9-A</option>
-                      <option value="9-B">9-B</option>
-                      <option value="10-A">10-A</option>
-                      <option value="10-B">10-B</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-section" className="font-semibold text-sm">Section</label>
-                    <select
-                      id="add-section"
-                      name="section"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    >
-                      <option value="">Select section</option>
-                      <option value="Science">Science</option>
-                      <option value="Commerce">Commerce</option>
-                      <option value="Arts">Arts</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-email" className="font-semibold text-sm">Email</label>
-                    <input
-                      id="add-email"
-                      name="email"
-                      type="email"
-                      placeholder="Enter email"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-mobile" className="font-semibold text-sm">Mobile</label>
-                    <input
-                      id="add-mobile"
-                      name="mobile"
-                      placeholder="Enter mobile number"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-parentName" className="font-semibold text-sm">Parent Name</label>
-                    <input
-                      id="add-parentName"
-                      name="parentName"
-                      placeholder="Enter parent name"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="add-address" className="font-semibold text-sm">Address</label>
-                    <input
-                      id="add-address"
-                      name="address"
-                      placeholder="Enter address"
-                      className="w-full p-2 border-2 border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 outline-none transition-all duration-300"
-                      required
-                    />
-                  </div>
+                  {[
+                    { id: 'add-name', name: 'name', label: 'Full Name', placeholder: 'Enter full name', type: 'text', required: true },
+                    { id: 'add-rollNo', name: 'rollNo', label: 'Roll Number', placeholder: 'Enter roll number', type: 'text', required: true },
+                    { id: 'add-class', name: 'class', label: 'Class', type: 'select', required: true, options: ['8-A', '9-A', '9-B', '10-A', '10-B'] },
+                    { id: 'add-section', name: 'section', label: 'Section', type: 'select', required: true, options: ['Science', 'Commerce', 'Arts'] },
+                    { id: 'add-email', name: 'email', label: 'Email', placeholder: 'Enter email', type: 'email', required: true },
+                    { id: 'add-mobile', name: 'mobile', label: 'Mobile', placeholder: 'Enter mobile number', type: 'text', required: true },
+                    { id: 'add-parentName', name: 'parentName', label: 'Parent Name', placeholder: 'Enter parent name', type: 'text', required: true },
+                    { id: 'add-address', name: 'address', label: 'Address', placeholder: 'Enter address', type: 'text', required: true },
+                  ].map((field) => (
+                    <div key={field.id} className="space-y-2">
+                      <label htmlFor={field.id} className="font-semibold text-sm text-gray-700">{field.label}</label>
+                      {field.type === 'select' ? (
+                        <select
+                          id={field.id}
+                          name={field.name}
+                          className="w-full p-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+                          required={field.required}
+                        >
+                          <option value="">Select {field.label.toLowerCase()}</option>
+                          {field.options.map(option => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          id={field.id}
+                          name={field.name}
+                          type={field.type}
+                          placeholder={field.placeholder}
+                          className="w-full p-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 outline-none transition-all duration-300 hover:border-blue-300 bg-white/80"
+                          required={field.required}
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="px-6 py-4 border-t bg-gray-50 flex justify-end rounded-b-lg">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  Add Student
-                </button>
-              </div>
-            </form>
+                <div className="flex justify-end pt-6 mt-6 border-t border-blue-100">
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    Add Student
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
 
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-2xl max-w-md w-full backdrop-blur-xl border border-white/20">
-            <div className="px-6 py-4 border-b">
-              <h3 className="text-xl font-semibold text-red-600">Confirm Delete</h3>
-              <p className="text-sm text-gray-600 mt-1">
-                Are you sure you want to delete {selectedStudent.name}? This action cannot be undone.
-              </p>
-            </div>
-            <div className="px-6 py-4 flex justify-end space-x-2">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-150"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                Delete Student
-              </button>
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-blue-100 animate-modal-slide-up">
+            <div className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                  <TrashIcon />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-red-600">Confirm Delete</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Are you sure you want to delete {selectedStudent.name}?
+                  </p>
+                </div>
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setIsDeleteModalOpen(false)}
+                  className="px-6 py-3 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 transition-all duration-300 hover:scale-105 bg-white/80"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                >
+                  Delete Student
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(-5deg); }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.1; transform: scale(1); }
+          50% { opacity: 0.2; transform: scale(1.1); }
+        }
+        @keyframes pulse-medium {
+          0%, 100% { opacity: 0.05; transform: scale(1); }
+          50% { opacity: 0.15; transform: scale(1.05); }
+        }
+        @keyframes modal-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modal-slide-up {
+          from { opacity: 0; transform: translateY(30px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slide-down {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-in-right {
+          from { opacity: 0; transform: translateX(30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-up {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+        .animate-float-medium { animation: float-medium 4s ease-in-out infinite; }
+        .animate-float-fast { animation: float-fast 3s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+        .animate-pulse-medium { animation: pulse-medium 6s ease-in-out infinite; }
+        .animate-modal-fade-in { animation: modal-fade-in 0.3s ease-out; }
+        .animate-modal-slide-up { animation: modal-slide-up 0.4s ease-out; }
+        .animate-slide-down { animation: slide-down 0.5s ease-out; }
+        .animate-slide-in-right { animation: slide-in-right 0.5s ease-out; }
+        .animate-slide-in-left { animation: slide-in-left 0.5s ease-out; }
+        .animate-slide-in-up { animation: slide-in-up 0.5s ease-out; }
+        .animate-fade-in { animation: fade-in 0.4s ease-out; }
+      `}</style>
     </div>
   );
 };

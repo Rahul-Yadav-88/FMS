@@ -80,6 +80,17 @@ const AdminFeeStructure = () => {
 
   const handleEditStructure = (structure) => {
     setSelectedStructure(structure);
+    // Pre-fill form with existing data
+    setNewStructure({
+      name: structure.name,
+      class: structure.class,
+      term: structure.term,
+    });
+    // Load existing fee heads
+    setFeeHeads(structure.feeHeads.map(head => ({
+      name: head.name,
+      amount: head.amount.toString()
+    })));
     setEditDialogOpen(true);
   };
 
@@ -104,29 +115,68 @@ const AdminFeeStructure = () => {
     setSelectedStructure(null);
   };
 
-  const handleCreateStructure = () => {
+  const handleSaveStructure = () => {
     const totalAmount = feeHeads.reduce((sum, head) => sum + (parseInt(head.amount) || 0), 0);
     
-    const newFeeStructure = {
-      id: Date.now(),
-      name: newStructure.name,
-      class: newStructure.class,
-      term: newStructure.term,
-      totalAmount: totalAmount,
-      feeHeads: [...feeHeads],
-      studentsAssigned: 0,
-      status: "Active",
-    };
-
-    setFeeStructures([...feeStructures, newFeeStructure]);
+    if (editDialogOpen && selectedStructure) {
+      // Update existing structure
+      const updatedStructures = feeStructures.map(structure => 
+        structure.id === selectedStructure.id
+          ? {
+              ...structure,
+              name: newStructure.name,
+              class: newStructure.class,
+              term: newStructure.term,
+              totalAmount: totalAmount,
+              feeHeads: feeHeads.map(head => ({
+                name: head.name,
+                amount: parseInt(head.amount) || 0
+              })),
+            }
+          : structure
+      );
+      setFeeStructures(updatedStructures);
+      setEditDialogOpen(false);
+      setSelectedStructure(null);
+    } else {
+      // Create new structure
+      const newFeeStructure = {
+        id: Date.now(),
+        name: newStructure.name,
+        class: newStructure.class,
+        term: newStructure.term,
+        totalAmount: totalAmount,
+        feeHeads: feeHeads.map(head => ({
+          name: head.name,
+          amount: parseInt(head.amount) || 0
+        })),
+        studentsAssigned: 0,
+        status: "Active",
+      };
+      setFeeStructures([...feeStructures, newFeeStructure]);
+      setIsCreateDialogOpen(false);
+    }
     
     // Reset form
+    resetForm();
+  };
+
+  const resetForm = () => {
     setNewStructure({ name: '', class: '', term: '' });
     setFeeHeads([
       { name: "Tuition Fee", amount: "" },
       { name: "Transport Fee", amount: "" },
     ]);
-    setIsCreateDialogOpen(false);
+  };
+
+  const handleCloseDialog = () => {
+    if (editDialogOpen) {
+      setEditDialogOpen(false);
+      setSelectedStructure(null);
+    } else {
+      setIsCreateDialogOpen(false);
+    }
+    resetForm();
   };
 
   const updateNewStructure = (field, value) => {
@@ -306,13 +356,19 @@ const AdminFeeStructure = () => {
         ))}
       </div>
 
-      {/* Create Fee Structure Dialog */}
-      {isCreateDialogOpen && (
+      {/* Create/Edit Fee Structure Dialog */}
+      {(isCreateDialogOpen || editDialogOpen) && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900">Create New Fee Structure</h2>
-              <p className="text-gray-600 mt-1">Define fee structure for a class with multiple fee heads.</p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {editDialogOpen ? 'Edit Fee Structure' : 'Create New Fee Structure'}
+              </h2>
+              <p className="text-gray-600 mt-1">
+                {editDialogOpen 
+                  ? 'Update the fee structure details below.' 
+                  : 'Define fee structure for a class with multiple fee heads.'}
+              </p>
             </div>
             
             <div className="p-6 space-y-6">
@@ -429,16 +485,16 @@ const AdminFeeStructure = () => {
 
             <div className="p-6 border-t border-gray-200 flex gap-3 justify-end">
               <button
-                onClick={() => setIsCreateDialogOpen(false)}
+                onClick={handleCloseDialog}
                 className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button
-                onClick={handleCreateStructure}
+                onClick={handleSaveStructure}
                 className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all duration-200"
               >
-                Create Fee Structure
+                {editDialogOpen ? 'Update Fee Structure' : 'Create Fee Structure'}
               </button>
             </div>
           </div>

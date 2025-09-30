@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, CreditCard, Download, Upload, Sparkles } from 'lucide-react';
+import { Search, CreditCard, Download, Upload, Sparkles, Users, TrendingUp, FileText } from 'lucide-react';
 
 const AdminFeeCollection = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,13 +54,13 @@ const AdminFeeCollection = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Paid':
-        return 'bg-green-100 text-green-700 animate-pulse';
+        return 'bg-green-100 text-green-700 border border-green-200';
       case 'Partial':
-        return 'bg-yellow-100 text-yellow-700 animate-pulse';
+        return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
       case 'Due':
-        return 'bg-red-100 text-red-700 animate-pulse';
+        return 'bg-red-100 text-red-700 border border-red-200';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-gray-100 text-gray-700 border border-gray-200';
     }
   };
 
@@ -75,7 +75,6 @@ const AdminFeeCollection = () => {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically handle the payment submission
     console.log({
       student: selectedStudent,
       paymentAmount,
@@ -84,7 +83,6 @@ const AdminFeeCollection = () => {
       remarks
     });
     setIsDialogOpen(false);
-    // Reset form
     setPaymentAmount('');
     setPaymentMode('');
     setTransactionId('');
@@ -95,54 +93,130 @@ const AdminFeeCollection = () => {
     const file = e.target.files[0];
     if (file) {
       console.log('File selected:', file.name);
-      // Handle file upload logic here
     }
   };
 
+  // Floating Animation Component
+  const FloatingElements = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-10 left-10 w-4 h-4 bg-blue-300/30 rounded-full animate-float-slow"></div>
+      <div className="absolute top-20 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-float-medium"></div>
+      <div className="absolute bottom-20 left-20 w-3 h-3 bg-blue-500/30 rounded-full animate-float-fast"></div>
+    </div>
+  );
+
+  // Animated Background
+  const AnimatedBackground = () => (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/20 rounded-full animate-pulse-slow"></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300/10 rounded-full animate-pulse-medium"></div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/30 relative overflow-hidden">
+      <AnimatedBackground />
+      
+      <div className="relative max-w-7xl mx-auto space-y-6 p-6">
         {/* Header */}
-        <div className="flex items-start justify-between mb-8 animate-in slide-in-from-top duration-500">
+        <div className="flex items-start justify-between mb-8 animate-slide-down">
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group hover:scale-105 transition-transform duration-300">
               <CreditCard className="w-8 h-8 text-white" strokeWidth={2} />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 Fee Collection
               </h1>
               <p className="text-gray-600 mt-1 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-green-500 animate-pulse" />
-                Manage your school's fee collection
+                <Sparkles className="w-5 h-5 text-blue-500 animate-pulse" />
+                <span>Manage fee payments with ease</span>
               </p>
             </div>
           </div>
           
           {/* Search Bar */}
-          <div className="relative w-80 animate-in slide-in-from-right duration-500">
+          <div className="relative w-80 animate-slide-in-right">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               placeholder="Search students..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 shadow-sm hover:shadow-md"
+              className="w-full pl-10 pr-4 py-2.5 border-2 border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md bg-white/80 backdrop-blur-sm"
             />
           </div>
         </div>
 
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              title: "Today's Collections",
+              value: "₹45,000",
+              description: "12 payments received",
+              icon: CreditCard,
+              color: "green",
+              delay: "0ms"
+            },
+            {
+              title: "Pending Collections",
+              value: "₹2,34,000",
+              description: "From 156 students",
+              icon: Users,
+              color: "red",
+              delay: "100ms"
+            },
+            {
+              title: "Collection Rate",
+              value: "84.2%",
+              description: "This month",
+              icon: TrendingUp,
+              color: "blue",
+              delay: "200ms"
+            }
+          ].map((stat, index) => {
+            const Icon = stat.icon;
+            const colorClasses = {
+              green: { bg: "bg-green-50", icon: "bg-green-100 text-green-600", text: "text-green-600" },
+              red: { bg: "bg-red-50", icon: "bg-red-100 text-red-600", text: "text-red-600" },
+              blue: { bg: "bg-blue-50", icon: "bg-blue-100 text-blue-600", text: "text-blue-600" }
+            }[stat.color];
+
+            return (
+              <div
+                key={index}
+                className="bg-white rounded-2xl border border-blue-100/50 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 group backdrop-blur-sm animate-card-float"
+                style={{ animationDelay: stat.delay }}
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-sm font-medium text-gray-700">{stat.title}</h3>
+                    <div className={`p-3 rounded-xl ${colorClasses.icon} group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+                  </div>
+                  <div className={`text-2xl font-bold ${colorClasses.text} mb-1`}>
+                    {stat.value}
+                  </div>
+                  <p className="text-xs text-gray-600">{stat.description}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {/* Students Table Card */}
-        <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all overflow-hidden animate-in slide-in-from-bottom duration-700">
+        <div className="bg-white rounded-2xl border border-blue-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden backdrop-blur-sm animate-slide-in-left">
           {/* Table Header Section */}
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 px-6 py-5 border-b border-gray-100">
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 px-6 py-5 border-b border-blue-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group hover:scale-105 transition-transform duration-300">
+                <FileText className="w-6 h-6 text-white" strokeWidth={2} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Students with Outstanding Fees</h2>
-                <p className="text-gray-600 text-sm mt-0.5">Collect fees and mark payments</p>
+                <h2 className="text-2xl font-bold text-gray-900">Fee Management</h2>
+                <p className="text-gray-600 text-sm mt-0.5">Track and collect student fees</p>
               </div>
             </div>
           </div>
@@ -151,13 +225,13 @@ const AdminFeeCollection = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                <tr className="bg-gradient-to-r from-blue-50/80 to-blue-100/50 border-b border-blue-100">
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Roll No.</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Student</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Class</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Fees</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Paid Amount</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Due Amount</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Paid</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Due</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                 </tr>
@@ -166,7 +240,7 @@ const AdminFeeCollection = () => {
                 {filteredStudents.map((student, index) => (
                   <tr 
                     key={student.rollNo} 
-                    className="border-b border-gray-100 hover:bg-gradient-to-r hover:from-green-50 hover:to-blue-50 transition-all animate-in slide-in-from-left duration-500"
+                    className="border-b border-blue-50 hover:bg-blue-50/50 transition-all duration-300 group animate-fade-in"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <td className="px-6 py-4">
@@ -174,18 +248,23 @@ const AdminFeeCollection = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-blue-500 flex items-center justify-center text-white font-semibold text-sm">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm group-hover:scale-110 transition-transform duration-300 shadow-lg">
                           {student.initials}
                         </div>
-                        <span className="font-medium text-gray-900">{student.name}</span>
+                        <div>
+                          <span className="font-medium text-gray-900 block">{student.name}</span>
+                          {student.lastPayment && (
+                            <span className="text-xs text-gray-500">Last: {student.lastPayment}</span>
+                          )}
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-gray-700">{student.class}</td>
+                    <td className="px-6 py-4 text-gray-700 font-medium">{student.class}</td>
                     <td className="px-6 py-4 font-bold text-gray-900">₹{student.totalFees.toLocaleString()}</td>
                     <td className="px-6 py-4 font-bold text-green-600">₹{student.paidAmount.toLocaleString()}</td>
                     <td className="px-6 py-4 font-medium text-red-600">₹{student.dueAmount.toLocaleString()}</td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getStatusColor(student.status)}`}>
+                      <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getStatusColor(student.status)} transition-all duration-300`}>
                         {student.status}
                       </span>
                     </td>
@@ -194,14 +273,16 @@ const AdminFeeCollection = () => {
                         {student.dueAmount > 0 && (
                           <button 
                             onClick={() => handleCollectFee(student)}
-                            className="px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg font-medium hover:from-green-700 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 duration-300"
+                            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg hover:shadow-xl hover:scale-105 duration-300 group"
                           >
-                            <CreditCard className="w-4 h-4" />
+                            <CreditCard className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             Collect Fee
                           </button>
                         )}
-                        <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 flex items-center gap-2 bg-transparent">
-                          <Download className="w-4 h-4" />
+                        <button 
+                          className="px-4 py-2 border border-blue-200 text-blue-700 rounded-xl font-medium hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 flex items-center gap-2 bg-white/80 backdrop-blur-sm group"
+                        >
+                          <Download className="w-4 h-4 group-hover:scale-110 transition-transform" />
                           Receipt
                         </button>
                       </div>
@@ -212,131 +293,69 @@ const AdminFeeCollection = () => {
             </table>
           </div>
         </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Today's Collections */}
-          <div className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 group animate-in slide-in-from-left duration-500 border-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-              <div className="w-full h-full bg-gradient-to-br from-green-500 to-green-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-            </div>
-
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-gray-700">Today's Collections</h3>
-                <div className="p-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <CreditCard className="w-4 h-4 text-white" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-green-600 mb-1">₹45,000</div>
-              <p className="text-xs text-gray-600">12 payments received</p>
-            </div>
-          </div>
-
-          {/* Pending Collections */}
-          <div className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 group animate-in slide-in-from-bottom duration-500 delay-100 border-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-              <div className="w-full h-full bg-gradient-to-br from-red-500 to-red-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-            </div>
-
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-gray-700">Pending Collections</h3>
-                <div className="p-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse">
-                  <CreditCard className="w-4 h-4 text-white" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-red-600 mb-1">₹2,34,000</div>
-              <p className="text-xs text-gray-600">From 156 students</p>
-            </div>
-          </div>
-
-          {/* Collection Rate */}
-          <div className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 group animate-in slide-in-from-right duration-500 delay-200 border-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8">
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 opacity-10 rounded-full group-hover:scale-110 transition-transform duration-500"></div>
-            </div>
-
-            <div className="relative p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-gray-700">Collection Rate</h3>
-                <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <CreditCard className="w-4 h-4 text-white" />
-                </div>
-              </div>
-              <div className="text-3xl font-bold text-blue-600 mb-1">84.2%</div>
-              <p className="text-xs text-gray-600">This month</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Payment Dialog */}
       {isDialogOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/20 bg-white/95 backdrop-blur-xl">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-modal-fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-blue-100 animate-modal-slide-up">
+            <FloatingElements />
+            
             <div className="p-6">
               {/* Header */}
               <div className="mb-6">
-                <h2 className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                  Collect Fee Payment
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  Record fee payment for {selectedStudent.name} (Roll No: {selectedStudent.rollNo})
-                </p>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800">Collect Fee Payment</h2>
+                    <p className="text-gray-600">
+                      For {selectedStudent.name} • Roll No: {selectedStudent.rollNo}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Student Info Summary */}
+              <div className="bg-blue-50 rounded-xl p-4 mb-6 border border-blue-100">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-sm text-gray-600">Total Fees</div>
+                    <div className="font-bold text-gray-800">₹{selectedStudent.totalFees.toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600">Paid Amount</div>
+                    <div className="font-bold text-green-600">₹{selectedStudent.paidAmount.toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600">Due Amount</div>
+                    <div className="font-bold text-red-600">₹{selectedStudent.dueAmount.toLocaleString()}</div>
+                  </div>
+                </div>
               </div>
 
               {/* Form */}
               <form onSubmit={handlePaymentSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Student Name</label>
+                    <label className="text-sm font-medium text-gray-700">Payment Amount (₹)</label>
                     <input
-                      type="text"
-                      value={selectedStudent.name}
-                      disabled
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Due Amount</label>
-                    <input
-                      type="text"
-                      value={`₹${selectedStudent.dueAmount.toLocaleString()}`}
-                      disabled
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-red-50 text-red-600 font-bold"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="paymentAmount" className="text-sm font-medium text-gray-700">
-                      Payment Amount (₹)
-                    </label>
-                    <input
-                      id="paymentAmount"
                       type="number"
                       placeholder="Enter amount"
                       value={paymentAmount}
                       onChange={(e) => setPaymentAmount(e.target.value)}
                       max={selectedStudent.dueAmount}
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-green-400 focus:outline-none transition-all duration-300"
+                      className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 hover:border-blue-300 bg-white/80"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <label htmlFor="paymentMode" className="text-sm font-medium text-gray-700">
-                      Payment Mode
-                    </label>
+                    <label className="text-sm font-medium text-gray-700">Payment Mode</label>
                     <select
-                      id="paymentMode"
                       value={paymentMode}
                       onChange={(e) => setPaymentMode(e.target.value)}
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-green-400 focus:outline-none transition-all duration-300"
+                      className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 hover:border-blue-300 bg-white/80"
                       required
                     >
                       <option value="">Select payment mode</option>
@@ -350,34 +369,32 @@ const AdminFeeCollection = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="transactionId" className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700">
                     Transaction ID / Reference
                   </label>
                   <input
-                    id="transactionId"
                     type="text"
                     placeholder="Enter transaction ID or reference number"
                     value={transactionId}
                     onChange={(e) => setTransactionId(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-green-400 focus:outline-none transition-all duration-300"
+                    className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 hover:border-blue-300 bg-white/80"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="paymentProof" className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700">
                     Payment Proof (Optional)
                   </label>
                   <div className="flex items-center gap-2">
                     <input
-                      id="paymentProof"
                       type="file"
                       accept="image/*,application/pdf"
                       onChange={handleFileUpload}
-                      className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-green-400 focus:outline-none transition-all duration-300"
+                      className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 hover:border-blue-300 bg-white/80"
                     />
                     <button
                       type="button"
-                      className="px-3 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-green-50 hover:border-green-300 transition-all duration-300 hover:scale-105 bg-transparent"
+                      className="px-4 py-3 border border-blue-200 text-blue-700 rounded-xl hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 bg-white/80 backdrop-blur-sm"
                     >
                       <Upload className="w-4 h-4" />
                     </button>
@@ -385,31 +402,30 @@ const AdminFeeCollection = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="remarks" className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700">
                     Remarks
                   </label>
                   <textarea
-                    id="remarks"
                     placeholder="Add any additional notes..."
                     rows={3}
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
-                    className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-green-400 focus:outline-none transition-all duration-300 resize-none"
+                    className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl focus:ring-2 focus:ring-blue-300 focus:border-blue-400 transition-all duration-300 hover:border-blue-300 resize-none bg-white/80"
                   />
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex justify-end gap-3 pt-6 border-t border-blue-100">
                   <button
                     type="button"
                     onClick={() => setIsDialogOpen(false)}
-                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 border border-blue-200 text-blue-700 rounded-xl font-medium hover:bg-blue-50 transition-all duration-300 hover:scale-105 bg-white/80 backdrop-blur-sm"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg font-medium hover:from-green-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                   >
                     Record Payment
                   </button>
@@ -419,6 +435,69 @@ const AdminFeeCollection = () => {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-15px) rotate(-5deg); }
+        }
+        @keyframes float-fast {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.1; transform: scale(1); }
+          50% { opacity: 0.2; transform: scale(1.1); }
+        }
+        @keyframes pulse-medium {
+          0%, 100% { opacity: 0.05; transform: scale(1); }
+          50% { opacity: 0.15; transform: scale(1.05); }
+        }
+        @keyframes modal-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes modal-slide-up {
+          from { opacity: 0; transform: translateY(30px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slide-down {
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-in-right {
+          from { opacity: 0; transform: translateX(30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes card-float {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+        .animate-float-medium { animation: float-medium 4s ease-in-out infinite; }
+        .animate-float-fast { animation: float-fast 3s ease-in-out infinite; }
+        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+        .animate-pulse-medium { animation: pulse-medium 6s ease-in-out infinite; }
+        .animate-modal-fade-in { animation: modal-fade-in 0.3s ease-out; }
+        .animate-modal-slide-up { animation: modal-slide-up 0.4s ease-out; }
+        .animate-slide-down { animation: slide-down 0.5s ease-out; }
+        .animate-slide-in-right { animation: slide-in-right 0.5s ease-out; }
+        .animate-slide-in-left { animation: slide-in-left 0.5s ease-out; }
+        .animate-card-float { animation: card-float 0.6s ease-out; }
+        .animate-fade-in { animation: fade-in 0.4s ease-out; }
+      `}</style>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // Import all necessary icons from lucide-react
 import {
   DollarSign,
@@ -9,6 +9,8 @@ import {
   Sparkles,
   ArrowUp,
   TrendingUp,
+  X,
+  Download,
 } from "lucide-react";
 
 // -----------------------------------------------------------------
@@ -92,7 +94,95 @@ const CustomInput = React.forwardRef(({ className = "", ...props }, ref) => {
 // -----------------------------------------------------------------
 
 const AccountantDashboard = () => {
-  // Data definitions remain the same
+  // State for pending payments
+  const [pendingPayments, setPendingPayments] = useState([
+    {
+      id: 1,
+      student: "Alice Brown",
+      class: "10-A",
+      amount: "₹5,000",
+      mode: "UPI",
+      time: "2 hours ago",
+      status: "pending", // pending, verified, rejected
+    },
+    {
+      id: 2,
+      student: "Bob Wilson",
+      class: "9-B",
+      amount: "₹4,500",
+      mode: "Bank Transfer",
+      time: "3 hours ago",
+      status: "pending",
+    },
+    {
+      id: 3,
+      student: "Carol Davis",
+      class: "11-C",
+      amount: "₹5,500",
+      mode: "Cash",
+      time: "4 hours ago",
+      status: "pending",
+    },
+  ]);
+
+  // State for search
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filtered payments based on search
+  const filteredPayments = pendingPayments.filter(payment =>
+    payment.student.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    payment.class.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    payment.amount.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    payment.mode.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Handle verify payment
+  const handleVerify = (id) => {
+    setPendingPayments(prevPayments =>
+      prevPayments.map(payment =>
+        payment.id === id ? { ...payment, status: "verified" } : payment
+      )
+    );
+  };
+
+  // Handle reject payment
+  const handleReject = (id) => {
+    setPendingPayments(prevPayments =>
+      prevPayments.map(payment =>
+        payment.id === id ? { ...payment, status: "rejected" } : payment
+      )
+    );
+  };
+
+  // Handle generate report
+  const handleGenerateReport = () => {
+    // Create CSV content
+    const headers = ["Student Name", "Class", "Amount", "Payment Mode", "Status", "Time"];
+    const csvContent = [
+      headers.join(","),
+      ...pendingPayments.map(payment => [
+        payment.student,
+        payment.class,
+        payment.amount.replace('₹', ''), // Remove ₹ symbol for clean data
+        payment.mode,
+        payment.status,
+        payment.time
+      ].join(","))
+    ].join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `payment-report-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Data definitions
   const stats = [
     {
       title: "Today's Collections",
@@ -106,22 +196,22 @@ const AccountantDashboard = () => {
     },
     {
       title: "Pending Verifications",
-      value: "8",
+      value: pendingPayments.filter(p => p.status === "pending").length.toString(),
       description: "Payments to verify",
       icon: Clock,
       color: "from-yellow-500 to-yellow-600",
       bgColor: "from-yellow-50 to-yellow-100",
-      change: "-3",
+      change: `-${pendingPayments.filter(p => p.status !== "pending").length}`,
       trend: "down",
     },
     {
       title: "Verified Today",
-      value: "15",
+      value: pendingPayments.filter(p => p.status === "verified").length.toString(),
       description: "Payments verified",
       icon: CheckCircle,
       color: "from-blue-500 to-blue-600",
       bgColor: "from-blue-50 to-blue-100",
-      change: "+5",
+      change: `+${pendingPayments.filter(p => p.status === "verified").length}`,
       trend: "up",
     },
     {
@@ -136,32 +226,60 @@ const AccountantDashboard = () => {
     },
   ];
 
-  const pendingPayments = [
+  const quickActions = [
     {
-      id: 1,
-      student: "Alice Brown",
-      class: "10-A",
-      amount: "₹5,000",
-      mode: "UPI",
-      time: "2 hours ago",
+      icon: CheckCircle,
+      label: "Verify Payments",
+      color: "from-green-500 to-green-600",
+      bgColor: "from-green-50 to-green-100",
+      onClick: () => console.log("Verify Payments clicked"),
     },
     {
-      id: 2,
-      student: "Bob Wilson",
-      class: "9-B",
-      amount: "₹4,500",
-      mode: "Bank Transfer",
-      time: "3 hours ago",
+      icon: DollarSign,
+      label: "Generate Reports",
+      color: "from-blue-500 to-blue-600",
+      bgColor: "from-blue-50 to-blue-100",
+      onClick: handleGenerateReport,
     },
     {
-      id: 3,
-      student: "Carol Davis",
-      class: "11-C",
-      amount: "₹5,500",
-      mode: "Cash",
-      time: "4 hours ago",
+      icon: AlertCircle,
+      label: "Send Due Reminders",
+      color: "from-red-500 to-red-600",
+      bgColor: "from-red-50 to-red-100",
+      onClick: () => console.log("Send Due Reminders clicked"),
     },
   ];
+
+  // Status badge component
+  const StatusBadge = ({ status }) => {
+    const statusConfig = {
+      pending: {
+        color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        text: "Pending",
+        icon: Clock,
+      },
+      verified: {
+        color: "bg-green-100 text-green-800 border-green-200",
+        text: "Verified",
+        icon: CheckCircle,
+      },
+      rejected: {
+        color: "bg-red-100 text-red-800 border-red-200",
+        text: "Rejected",
+        icon: X,
+      },
+    };
+
+    const config = statusConfig[status];
+    const Icon = config.icon;
+
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${config.color}`}>
+        <Icon className="h-3 w-3 mr-1" />
+        {config.text}
+      </span>
+    );
+  };
 
   return (
     <div className="space-y-8 p-6 lg:p-10 bg-gray-50 min-h-screen font-sans">
@@ -183,6 +301,8 @@ const AccountantDashboard = () => {
             <CustomInput
               placeholder="Search payments..."
               className="pl-10 w-full border-2 focus:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -252,20 +372,32 @@ const AccountantDashboard = () => {
               <div className="p-2 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg animate-pulse">
                 <Clock className="h-4 w-4 text-white" />
               </div>
-              <span>Pending Verifications</span>
+              <span>Payment Verifications</span>
             </CardTitle>
-            <CardDescription>Payments awaiting verification</CardDescription>
+            <CardDescription>All payments with their current status</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             <div className="space-y-0">
-              {pendingPayments.map((payment, index) => (
+              {filteredPayments.map((payment, index) => (
                 <div
                   key={payment.id}
-                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gradient-to-r from-yellow-50/50 to-orange-50/50 hover:from-yellow-100 hover:to-orange-100 border-b border-yellow-200 last:border-b-0 transition-all group animate-in slide-in-from-right duration-500"
+                  className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b last:border-b-0 transition-all group animate-in slide-in-from-right duration-500 ${
+                    payment.status === "pending"
+                      ? "bg-gradient-to-r from-yellow-50/50 to-orange-50/50 hover:from-yellow-100 hover:to-orange-100 border-yellow-200"
+                      : payment.status === "verified"
+                      ? "bg-gradient-to-r from-green-50/50 to-green-50/50 hover:from-green-100 hover:to-green-100 border-green-200"
+                      : "bg-gradient-to-r from-red-50/50 to-red-50/50 hover:from-red-100 hover:to-red-100 border-red-200"
+                  }`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="flex items-center space-x-3 mb-3 sm:mb-0">
-                    <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform duration-300 flex-shrink-0 ${
+                      payment.status === "pending"
+                        ? "bg-gradient-to-r from-yellow-500 to-orange-500"
+                        : payment.status === "verified"
+                        ? "bg-gradient-to-r from-green-500 to-green-600"
+                        : "bg-gradient-to-r from-red-500 to-red-600"
+                    }`}>
                       {payment.student
                         .split(" ")
                         .map((n) => n[0])
@@ -281,30 +413,48 @@ const AccountantDashboard = () => {
                     </div>
                   </div>
                   <div className="text-left sm:text-right flex flex-col items-start sm:items-end">
-                    <p className="font-bold text-yellow-600">
+                    <p className={`font-bold ${
+                      payment.status === "pending"
+                        ? "text-yellow-600"
+                        : payment.status === "verified"
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}>
                       {payment.amount}
                     </p>
-                    <p className="text-sm text-gray-500 mb-2">
-                      {payment.time}
-                    </p>
-                    <div className="flex space-x-2 mt-1">
-                      <CustomButton
-                        size="sm"
-                        className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
-                      >
-                        Verify
-                      </CustomButton>
-                      <CustomButton
-                        size="sm"
-                        variant="destructive"
-                        className="shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
-                      >
-                        Reject
-                      </CustomButton>
+                    <div className="flex items-center space-x-2 mt-1 mb-2">
+                      <StatusBadge status={payment.status} />
+                      <p className="text-sm text-gray-500">
+                        {payment.time}
+                      </p>
                     </div>
+                    {payment.status === "pending" && (
+                      <div className="flex space-x-2 mt-1">
+                        <CustomButton
+                          size="sm"
+                          className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
+                          onClick={() => handleVerify(payment.id)}
+                        >
+                          Verify
+                        </CustomButton>
+                        <CustomButton
+                          size="sm"
+                          variant="destructive"
+                          className="shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
+                          onClick={() => handleReject(payment.id)}
+                        >
+                          Reject
+                        </CustomButton>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
+              {filteredPayments.length === 0 && (
+                <div className="p-8 text-center text-gray-500">
+                  No payments found matching your search.
+                </div>
+              )}
             </div>
           </CardContent>
         </CustomCard>
@@ -322,46 +472,27 @@ const AccountantDashboard = () => {
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-4">
-              {[
-                {
-                  icon: CheckCircle,
-                  label: "Verify Payments",
-                  color: "from-green-500 to-green-600",
-                  bgColor: "from-green-50 to-green-100",
-                },
-                {
-                  icon: DollarSign,
-                  label: "Generate Reports",
-                  color: "from-blue-500 to-blue-600",
-                  bgColor: "from-blue-50 to-blue-100",
-                },
-                {
-                  icon: AlertCircle,
-                  label: "Send Due Reminders",
-                  color: "from-red-500 to-red-600",
-                  bgColor: "from-red-50 to-red-100",
-                },
-              ].map((action, index) => {
-                const Icon = action.icon;
-                return (
-                  <CustomButton
-                    key={index}
-                    // Adjusted hover state to ensure background change is visible
-                    className={`w-full justify-start h-14 bg-gradient-to-r ${action.bgColor} hover:brightness-95 border-0 shadow-md hover:shadow-xl transition-all hover:scale-[1.02] group animate-in slide-in-from-bottom duration-500`}
-                    style={{ animationDelay: `${index * 150}ms` }}
-                    variant="outline"
-                  >
-                    <div
-                      className={`p-2 rounded-lg bg-gradient-to-r ${action.color} mr-3 group-hover:scale-110 transition-transform duration-300 shadow-sm`}
-                    >
-                      <Icon className="h-4 w-4 text-white" />
-                    </div>
-                    <span className="font-medium text-gray-700">
-                      {action.label}
-                    </span>
-                  </CustomButton>
-                );
-              })}
+              {quickActions.map((action, index) => {
+  const Icon = action.icon;
+  return (
+    <CustomButton
+      key={index}
+      className={`w-full justify-start h-14 bg-gradient-to-r ${action.bgColor} hover:brightness-95 border-0 shadow-md hover:shadow-xl transition-all hover:scale-[1.02] group animate-in slide-in-from-bottom duration-500`}
+      style={{ animationDelay: `${index * 150}ms` }}
+      variant="outline"
+      onClick={action.onClick}
+    >
+      <div
+        className={`p-2 rounded-lg bg-gradient-to-r ${action.color} mr-3 group-hover:scale-110 transition-transform duration-300 shadow-sm`}
+      >
+        <Icon className="h-4 w-4 text-white" />
+      </div>
+      <span className="font-medium text-gray-700">
+        {action.label}
+      </span>
+    </CustomButton>
+  );
+})}
             </div>
           </CardContent>
         </CustomCard>

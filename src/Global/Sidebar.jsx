@@ -7,7 +7,7 @@ import {
   History,
   AlertCircle,
   GraduationCap,
-  Sparkles,
+  ChevronRight,
 } from 'lucide-react';
 
 const Sidebar = ({ role, activeItem, setActiveItem }) => {
@@ -39,32 +39,27 @@ const Sidebar = ({ role, activeItem, setActiveItem }) => {
     studentMenu;
 
   return (
-    <div className="w-64 h-screen bg-white/80 backdrop-blur-xl shadow-2xl border-r border-white/20 flex flex-col relative overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-600/5 via-purple-600/5 to-indigo-600/5 animate-pulse"></div>
+    <div className="w-64 h-screen bg-white shadow-lg border-r border-gray-100 flex flex-col relative overflow-hidden">
+      {/* Subtle animated background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-sky-50/20 animate-gradient-xy"></div>
 
       {/* Header */}
-      <div className="relative p-6 border-b border-gray-100 z-10">
-        <div className="flex items-center space-x-3 group">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+      <div className="relative p-6 border-b border-gray-100 z-10 bg-white/70 backdrop-blur-sm">
+        <div className="flex items-center space-x-3">
+          <div className="bg-gradient-to-r from-blue-500 to-sky-500 p-3 rounded-xl shadow-sm transition-all duration-300 hover:shadow-md">
             <GraduationCap className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              SFMS
-            </h2>
-            <div className="flex items-center space-x-1">
-              <Sparkles className="h-3 w-3 text-yellow-500 animate-pulse" />
-              <p className="text-sm text-gray-600 capitalize font-medium">{role}</p>
-            </div>
+            <h2 className="text-xl font-semibold text-gray-800">SFMS</h2>
+            <p className="text-sm text-gray-600 capitalize font-medium">{role}</p>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
       <div className="flex-1 py-6 px-4 relative z-10">
-        <nav className="space-y-2">
-          {menuItems.map((item, index) => {
+        <nav className="space-y-1">
+          {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeItem === item.name;
 
@@ -72,21 +67,30 @@ const Sidebar = ({ role, activeItem, setActiveItem }) => {
               <button
                 key={item.name}
                 onClick={() => setActiveItem(item.name)}
-                className={`w-full flex items-center px-4 py-3 rounded-xl text-left transition-all duration-300 group relative overflow-hidden ${
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-all duration-300 group relative overflow-hidden ${
                   isActive
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl transform scale-105'
-                    : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-700 hover:scale-105'
+                    ? 'bg-blue-50 border-l-4 border-blue-500 text-blue-700 shadow-sm transform translate-x-1'
+                    : 'text-gray-600 hover:bg-blue-50/50 hover:text-blue-600 hover:translate-x-1'
                 }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <Icon
-                  className={`mr-3 h-5 w-5 transition-all duration-300 ${
-                    isActive ? 'animate-pulse' : 'group-hover:scale-110 text-gray-500'
-                  }`}
-                />
-                <span className="font-medium">{item.name}</span>
+                <div className="flex items-center">
+                  <div className={`p-2 rounded-lg mr-3 transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-blue-100 text-blue-600' 
+                      : 'bg-gray-100 text-gray-500 group-hover:bg-blue-100 group-hover:text-blue-500'
+                  }`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <span className="font-medium text-sm">{item.name}</span>
+                </div>
+                
                 {isActive && (
-                  <div className="absolute right-2 w-2 h-2 bg-white rounded-full animate-ping"></div>
+                  <ChevronRight className="h-4 w-4 text-blue-500 animate-slide-in" />
+                )}
+                
+                {/* Active indicator */}
+                {isActive && (
+                  <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-blue-500 rounded-l-full"></div>
                 )}
               </button>
             );
@@ -94,11 +98,10 @@ const Sidebar = ({ role, activeItem, setActiveItem }) => {
         </nav>
       </div>
 
-      {/* Decorative bottom gradient */}
-      <div className="h-20 bg-gradient-to-t from-blue-600/10 to-transparent z-0"></div>
+      {/* Bottom subtle gradient */}
+      <div className="h-8 bg-gradient-to-t from-blue-50/50 to-transparent z-0"></div>
     </div>
   );
 };
 
 export default Sidebar;
- 
