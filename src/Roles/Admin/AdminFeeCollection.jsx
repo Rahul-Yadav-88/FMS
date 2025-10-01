@@ -96,6 +96,233 @@ const AdminFeeCollection = () => {
     }
   };
 
+  // Generate PDF Receipt
+  const generateReceipt = (student) => {
+    // Create a new window for PDF
+    const receiptWindow = window.open('', '_blank');
+    
+    // Get current date
+    const currentDate = new Date().toLocaleDateString('en-IN');
+    const receiptNumber = `REC${Date.now()}`;
+    
+    // PDF content
+    const pdfContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Fee Receipt - ${student.name}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          }
+          .receipt-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+          }
+          .header {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 30px;
+            text-align: center;
+          }
+          .school-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          .receipt-title {
+            font-size: 20px;
+            opacity: 0.9;
+          }
+          .content {
+            padding: 30px;
+          }
+          .student-info {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+          }
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+          }
+          .info-item {
+            margin-bottom: 10px;
+          }
+          .info-label {
+            font-weight: bold;
+            color: #64748b;
+            font-size: 14px;
+          }
+          .info-value {
+            color: #1e293b;
+            font-size: 16px;
+          }
+          .amount-section {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 25px 0;
+          }
+          .total-amount {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+          }
+          .breakdown {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+          }
+          .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+          }
+          .breakdown-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #3b82f6;
+          }
+          .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+          }
+          .signature {
+            margin-top: 40px;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 20px;
+            text-align: right;
+          }
+          .watermark {
+            opacity: 0.1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            font-weight: bold;
+            color: #64748b;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-container">
+          <div class="header">
+            <div class="school-name">EDU MANAGEMENT SYSTEM</div>
+            <div class="receipt-title">FEE PAYMENT RECEIPT</div>
+          </div>
+          
+          <div class="content">
+            <div class="student-info">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                  <div class="info-label">Receipt Number</div>
+                  <div class="info-value" style="color: #3b82f6; font-weight: bold;">${receiptNumber}</div>
+                </div>
+                <div style="text-align: right;">
+                  <div class="info-label">Date</div>
+                  <div class="info-value">${currentDate}</div>
+                </div>
+              </div>
+              
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Student Name</div>
+                  <div class="info-value">${student.name}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Roll Number</div>
+                  <div class="info-value">${student.rollNo}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Class</div>
+                  <div class="info-value">${student.class}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Academic Year</div>
+                  <div class="info-value">2024-2025</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="amount-section">
+              <div style="font-size: 16px; opacity: 0.9;">Total Amount Paid</div>
+              <div class="total-amount">₹${student.paidAmount.toLocaleString()}</div>
+              <div style="font-size: 14px; opacity: 0.9;">${student.status === 'Paid' ? 'Full Payment Received' : 'Partial Payment Received'}</div>
+            </div>
+
+            <div class="breakdown">
+              <div style="font-weight: bold; margin-bottom: 15px; color: #1e293b; font-size: 16px;">Fee Breakdown</div>
+              <div class="breakdown-item">
+                <span>Total Course Fees:</span>
+                <span>₹${student.totalFees.toLocaleString()}</span>
+              </div>
+              <div class="breakdown-item">
+                <span>Amount Paid:</span>
+                <span style="color: #3b82f6;">₹${student.paidAmount.toLocaleString()}</span>
+              </div>
+              <div class="breakdown-item">
+                <span>Due Amount:</span>
+                <span style="color: ${student.dueAmount > 0 ? '#ef4444' : '#3b82f6'};">₹${student.dueAmount.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6; margin: 20px 0;">
+              <div style="font-weight: bold; color: #1e40af; margin-bottom: 5px;">Payment Status</div>
+              <div style="color: #3b82f6; font-size: 18px; font-weight: bold;">${student.status}</div>
+              ${student.lastPayment ? `<div style="color: #64748b; font-size: 12px; margin-top: 5px;">Last Payment: ${student.lastPayment}</div>` : ''}
+            </div>
+
+            <div class="signature">
+              <div style="margin-bottom: 40px;">
+                <div style="border-top: 1px solid #cbd5e1; width: 200px; margin-left: auto;"></div>
+                <div style="text-align: right; color: #64748b; font-size: 14px; margin-top: 5px;">Authorized Signature</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div>Edu Management System • 123 Education Street, Knowledge City • Phone: +91-9876543210</div>
+            <div style="margin-top: 5px;">Email: info@edumanagement.edu • Website: www.edumanagement.edu</div>
+            <div style="margin-top: 10px; font-size: 10px;">This is a computer generated receipt. No signature required.</div>
+          </div>
+        </div>
+
+        <div class="watermark">PAID</div>
+      </body>
+      </html>
+    `;
+
+    // Write content to new window
+    receiptWindow.document.write(pdfContent);
+    receiptWindow.document.close();
+    
+    // Print the receipt
+    setTimeout(() => {
+      receiptWindow.print();
+    }, 500);
+  };
+
   // Floating Animation Component
   const FloatingElements = () => (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -280,6 +507,7 @@ const AdminFeeCollection = () => {
                           </button>
                         )}
                         <button 
+                          onClick={() => generateReceipt(student)}
                           className="px-4 py-2 border border-blue-200 text-blue-700 rounded-xl font-medium hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 flex items-center gap-2 bg-white/80 backdrop-blur-sm group"
                         >
                           <Download className="w-4 h-4 group-hover:scale-110 transition-transform" />
